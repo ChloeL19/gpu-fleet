@@ -66,6 +66,12 @@ for dc in runpod._call("GET", "/catalog/datacenters?include=GPU_AVAILABILITY")["
 PY
 ```
 
+## One per pair of participants
+
+`pair_fleet --participants 23` (or `--from-airtable`) runs `create_volume_pod` for
+each of the first `ceil(N/2)` names, in parallel, using `PAIR_GPU_TYPE`,
+`PAIR_DATA_CENTER` and `PAIR_VOLUME_SIZE_GB` from `config.env`. See CLAUDE.md.
+
 ## Recreate one on its existing data
 
 Run it again with just the pod name. It rebuilds the pod from its entry in

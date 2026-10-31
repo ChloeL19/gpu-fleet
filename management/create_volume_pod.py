@@ -45,6 +45,7 @@ See NETWORK_VOLUMES.md for the full walk-through and how to pick a datacenter.
 """
 import argparse
 import ast
+import fcntl
 import json
 import os
 import time
@@ -104,6 +105,10 @@ def find_or_create_volume(vol_name, size, data_center):
 
 def record(bare, full, vol_id, vol_name, dc, size, gpu, cloud, mount,
            vcpu=None, memory=None, disk=None, gpu_count=1, note=None):
+    # Lock: pair_fleet runs several of these at once, and an unlocked
+    # read-modify-write would drop other pods' entries.
+    lock = open(REGISTRY + ".lock", "w")
+    fcntl.flock(lock, fcntl.LOCK_EX)
     reg = {}
     if os.path.exists(REGISTRY):
         reg = json.load(open(REGISTRY))
@@ -122,6 +127,8 @@ def record(bare, full, vol_id, vol_name, dc, size, gpu, cloud, mount,
     }
     json.dump(reg, open(REGISTRY, "w"), indent=2, sort_keys=True)
     open(REGISTRY, "a").write("\n")
+    fcntl.flock(lock, fcntl.LOCK_UN)
+    lock.close()
     print(f"Recorded {full} -> volume {vol_id} in {REGISTRY}")
 
 

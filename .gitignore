@@ -3,6 +3,7 @@ config.env
 keys/
 logs/
 management/network_volumes.json
+management/network_volumes.json.lock
 
 __pycache__/
 *.pyc

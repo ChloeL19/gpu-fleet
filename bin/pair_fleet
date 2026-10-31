@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# pair_fleet — one network-volume pod per pair of participants (ceil(N/2) pods)
+REPO="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+PY="${PY:-$HOME/.venvs/global/bin/python}"; [ -x "$PY" ] || PY=python3
+cd "$REPO/management" && exec "$PY" pair_fleet.py "$@"

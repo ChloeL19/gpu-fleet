@@ -141,6 +141,7 @@ destroy_pods --all     # lists every pod and asks before destroying them
 | `ssh_config` | Print the SSH config block for participants. |
 | `show_key` | Print the shared private key for participants. |
 | `create_volume_pod` | Create a pod on a persistent network volume (see `NETWORK_VOLUMES.md`). |
+| `pair_fleet` | One network-volume pod per pair of participants: `ceil(N/2)` pods, count from `--participants N` or Airtable (see `CLAUDE.md`). |
 | `create_vast_pods` | Create pods on Vast.ai, as a second source of GPUs. |
 
 Names can be bare (`alder`) or prefixed (`gpu-alder`). `CLAUDE.md` has the full option

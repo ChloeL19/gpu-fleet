@@ -11,7 +11,7 @@ approval.
 time. When they say "at 9am", ask once which timezone they mean, and write it here
 (below) so future sessions don't have to ask:
 
-- Organizer timezone: _(fill in)_
+- Organizer timezone: America/New_York (Collider, NYC)
 
 ---
 
@@ -100,6 +100,17 @@ real start time. est$ = rate × uptime (approximate).
 `NETWORK_VOLUMES.md`. A new pod needs `--gpu-type` (and `--data-center` for a new
 volume); re-running with just the name rebuilds it from `network_volumes.json` on the
 same volume. Retries while its datacenter has no capacity (`--timeout`, default 600s).
+
+**`pair_fleet`** — one network-volume pod per *pair* of participants: N attendees
+→ `ceil(N/2)` pods on the first names in `MACHINE_NAME_LIST`, each via
+`create_volume_pod` (so each slot keeps `<prefix>-<name>-vol` across meetings).
+Count from `--participants N`, or `--from-airtable` (rows in `AIRTABLE_VIEW_ID` with
+`AIRTABLE_ATTENDED_FIELD` checked; `--planned` counts every row). `--assign` writes
+each person's pod into `AIRTABLE_POD_FIELD`, two per pod in view order. Skips pods
+that already exist, shows the plan and asks before creating (`--yes` skips,
+`--dry-run` stops after the plan). GPU / datacenter / volume size default to
+`PAIR_GPU_TYPE`, `PAIR_DATA_CENTER`, `PAIR_VOLUME_SIZE_GB`. Then `ready_pods`.
+Volumes are never deleted by any script; see NETWORK_VOLUMES.md.
 
 **`deploy_keys`** (→ `management/copy_api_keys.py`) — see below. `--pod <name>`
 (bare or prefixed, repeatable) restricts it; `--max-parallel N` (default 30).
